@@ -16,6 +16,8 @@ namespace TRMDesktopUI.ViewModels
         private string _userName = "ngtphat.towa@gmail.com";
         private string _password = "Pwd12345.";
 
+        private string _errorMessage;
+
         private IAPIHelper _apiHelper;
 
         #endregion
@@ -51,6 +53,16 @@ namespace TRMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => CanLogIn);
             }
         }
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
 
         public bool CanLogIn
         {
@@ -67,18 +79,31 @@ namespace TRMDesktopUI.ViewModels
             }
 
         }
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = false;
+                if (ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
         #endregion
 
         #region Methods
-        public async void LogIn()
+        public async Task LogIn()
         {
             try
             {
+                ErrorMessage = "";
                 var result = await _apiHelper.Authenticate(UserName, Password);
             }
             catch (Exception ex)
             {
-                Console.Out.WriteLine(ex.Message.ToString());
+                ErrorMessage = ex.Message;
             }
         }
         #endregion
