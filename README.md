@@ -11,3 +11,4 @@
 6. Dependency Injection in WPF ✔
 7. Planning the Register ✔
 8. SQL Database Table Creation ✔
+9. WPF Login Form Creation ✔
