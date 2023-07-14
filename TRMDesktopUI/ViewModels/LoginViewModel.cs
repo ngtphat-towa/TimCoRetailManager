@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TRMDesktopUI.Helpers;
 
 namespace TRMDesktopUI.ViewModels
 {
@@ -14,6 +15,18 @@ namespace TRMDesktopUI.ViewModels
         // These values are for manual testing only.
         private string _userName = "ngtphat.towa@gmail.com";
         private string _password = "Pwd12345.";
+
+        private IAPIHelper _apiHelper;
+
+        #endregion
+
+
+        #region Contructor
+
+        public LoginViewModel(IAPIHelper apiHelper)
+        {
+            _apiHelper = apiHelper;
+        }
         #endregion
 
         #region Properties
@@ -57,9 +70,16 @@ namespace TRMDesktopUI.ViewModels
         #endregion
 
         #region Methods
-        public void LogIn()
+        public async void LogIn()
         {
-
+            try
+            {
+                var result = await _apiHelper.Authenticate(UserName, Password);
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine(ex.Message.ToString());
+            }
         }
         #endregion
 

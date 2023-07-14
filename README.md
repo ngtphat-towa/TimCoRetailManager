@@ -12,3 +12,4 @@
 7. Planning the Register ✔
 8. SQL Database Table Creation ✔
 9. WPF Login Form Creation ✔
+10. Wire Up the WPF Login form to the API ✔
