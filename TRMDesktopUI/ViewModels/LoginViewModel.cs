@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TRMDesktopUI.Helpers;
 
 namespace TRMDesktopUI.ViewModels
 {
@@ -14,6 +15,20 @@ namespace TRMDesktopUI.ViewModels
         // These values are for manual testing only.
         private string _userName = "ngtphat.towa@gmail.com";
         private string _password = "Pwd12345.";
+
+        private string _errorMessage;
+
+        private IAPIHelper _apiHelper;
+
+        #endregion
+
+
+        #region Contructor
+
+        public LoginViewModel(IAPIHelper apiHelper)
+        {
+            _apiHelper = apiHelper;
+        }
         #endregion
 
         #region Properties
@@ -38,6 +53,16 @@ namespace TRMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => CanLogIn);
             }
         }
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
 
         public bool CanLogIn
         {
@@ -54,12 +79,32 @@ namespace TRMDesktopUI.ViewModels
             }
 
         }
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = false;
+                if (ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
         #endregion
 
         #region Methods
-        public void LogIn()
+        public async Task LogIn()
         {
-
+            try
+            {
+                ErrorMessage = "";
+                var result = await _apiHelper.Authenticate(UserName, Password);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
         }
         #endregion
 
