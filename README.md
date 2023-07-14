@@ -6,3 +6,4 @@
 1. Setting Up a GitHub Repository ✔
 2. Creating a WebAPI with Authentication ✔
 3. Configuring Swagger in WebAPI  ✔
+4. SQL Database Project ✔
