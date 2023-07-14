@@ -14,3 +14,4 @@
 9. WPF Login Form Creation ✔
 10. Wire Up the WPF Login form to the API ✔
 11. Login Form Error Handling ✔
+12. Getting User Data ✔
