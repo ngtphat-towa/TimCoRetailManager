@@ -6,15 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TRMDesktopUI.Library.Api;
+using TRMDesktopUI.Library.Models;
 
 namespace TRMDesktopUI.ViewModels
 {
     public class SalesViewModel:Screen
     {
         #region Private Fields
-        private IAPIHelper _apiHelper;
+        IProductEndpoint _productEndpoint;
 
-        private BindingList<string> _products;
+        private BindingList<ProductModel> _products;
         private BindingList<string> _cart;
 
         private int _itemQuantity;
@@ -24,16 +25,20 @@ namespace TRMDesktopUI.ViewModels
 
         #region Contructor
 
-        public SalesViewModel(IAPIHelper apiHelper)
+        public SalesViewModel(IProductEndpoint productEndpoint)
         {
-            _apiHelper = apiHelper;
+            _productEndpoint = productEndpoint;
         }
-
+        protected async override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+            await LoadProducts();
+        }
 
         #endregion
 
         #region Properties
-        public BindingList<string> Products
+        public BindingList<ProductModel> Products
         {
             get { return _products; }
             set
@@ -115,7 +120,11 @@ namespace TRMDesktopUI.ViewModels
         #endregion
 
         #region Private Methods
-
+         private async Task LoadProducts()
+        {
+            var productList = await _productEndpoint.GetAll();
+            Products = new BindingList<ProductModel>(productList);
+        }
         #endregion
     }
 }

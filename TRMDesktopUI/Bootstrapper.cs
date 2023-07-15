@@ -41,7 +41,8 @@ namespace TRMDesktopUI
             // Configures the container for the application.
 
             // Set the instance of the container
-            _container.Instance(_container);
+            _container.Instance(_container)
+              .PerRequest<IProductEndpoint, ProductEndpoint>();
 
             // Register the WindowManager and EventAggregator as singletons
             _container

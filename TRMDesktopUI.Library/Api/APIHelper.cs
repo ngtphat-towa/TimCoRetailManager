@@ -16,6 +16,7 @@ namespace TRMDesktopUI.Library.Api
         #region Fields
         private HttpClient _apiClient;
         private ILoggedInUserModel _loggedInUserModel;
+
         #endregion
 
         #region Constructor
@@ -32,6 +33,16 @@ namespace TRMDesktopUI.Library.Api
             _apiClient.BaseAddress = new Uri(api);
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+        #endregion
+
+        #region Properties
+        public HttpClient ApiClient
+        {
+            get
+            {
+                return _apiClient;
+            }
         }
         #endregion
 
