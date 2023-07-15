@@ -14,3 +14,8 @@
 9. WPF Login Form Creation ✔
 10. Wire Up the WPF Login form to the API ✔
 11. Login Form Error Handling ✔
+12. Getting User Data ✔
+13. Getting User Data (Part 2)  ✔
+14. Sales Page Creation ✔
+15. Event Aggregation in WPF ✔
+16. Display Product Data ✔

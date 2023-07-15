@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TRMDesktopUI.Helpers;
+using TRMDesktopUI.Library.Api;
+using TRMDesktopUI.Library.Models;
 using TRMDesktopUI.ViewModels;
 
 namespace TRMDesktopUI
@@ -39,12 +41,14 @@ namespace TRMDesktopUI
             // Configures the container for the application.
 
             // Set the instance of the container
-            _container.Instance(_container);
+            _container.Instance(_container)
+              .PerRequest<IProductEndpoint, ProductEndpoint>();
 
             // Register the WindowManager and EventAggregator as singletons
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>()
                 .Singleton<IAPIHelper, APIHelper>();
 
             // Get all types in the assembly that are classes and end with "ViewModel"

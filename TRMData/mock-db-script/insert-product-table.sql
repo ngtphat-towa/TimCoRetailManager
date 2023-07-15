@@ -1,0 +1,22 @@
+﻿INSERT INTO [dbo].[Product] ([ProductName], [Description], [RetailPrice], [QuantityInStock])
+VALUES
+('Coca-Cola', 'Classic Coca-Cola soda in a can', 0.99, 100),
+('Pepsi', 'Classic Pepsi soda in a can', 0.99, 200),
+('Lays', 'Classic Lays potato chips in a bag', 3.99, 50),
+('Tostitos', 'Tostitos tortilla chips in a bag', 3.99, 75),
+('Nabisco Oreo', 'Classic Oreo cookies in a package', 4.99, 100),
+('Nabisco Chips Ahoy!', 'Classic Chips Ahoy! cookies in a package', 4.99, 200),
+('Kellogg\'s Pop-Tarts', 'Frosted strawberry Pop-Tarts in a box', 3.99, 50),
+('Kellogg\'s Frosted Flakes', 'Frosted Flakes cereal in a box', 3.99, 75),
+('General Mills Cheerios', 'Cheerios cereal in a box', 3.99, 100),
+('General Mills Lucky Charms', 'Lucky Charms cereal in a box', 3.99, 200),
+('Heinz Ketchup', 'Heinz tomato ketchup in a bottle', 2.99, 50),
+('French\'s Mustard', 'French\'s yellow mustard in a bottle', 1.99, 75),
+('Jif Peanut Butter', 'Jif creamy peanut butter in a jar', 4.99, 100),
+('Smucker\'s Jelly','Smucker\'s grape jelly in a jar' ,3.49 ,200 ),
+('Bumble Bee Tuna','Bumble Bee solid white albacore tuna in water' ,1.49 ,50 ),
+('StarKist Tuna','StarKist chunk light tuna in water' ,0.99 ,75 ),
+('Gorton\'s Fish Sticks','Gorton\'s fish sticks made with wild-caught Alaskan Pollock' ,4.49 ,100 ),
+('Mrs. Paul\'s Fish Fillets','Mrs. Paul\'s crispy battered fish fillets' ,5.49 ,200 ),
+('Breyers Vanilla Ice Cream','Breyers natural vanilla ice cream in a tub' ,4.99 ,50 ),
+('Ben & Jerry\'s Chocolate Fudge Brownie','Ben & Jerry\'s chocolate fudge brownie ice cream in a pint' ,4.49 ,75 );
