@@ -185,12 +185,13 @@ namespace TRMDesktopUI.ViewModels
         }
         public void CheckOut()
         {
-
+            // TODO: Refactor the code to move the checkout cart logic from the front-end to the back-end.
+            // This will improve the separation of concerns and make the code more maintainable.
         }
         #endregion
 
         #region Private Methods
-         private async Task LoadProducts()
+        private async Task LoadProducts()
         {
             var productList = await _productEndpoint.GetAll();
             Products = new BindingList<ProductModel>(productList);
