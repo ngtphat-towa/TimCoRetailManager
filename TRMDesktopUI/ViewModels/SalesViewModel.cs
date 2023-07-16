@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using TRMDesktopUI.Library.Api;
 using TRMDesktopUI.Library.Helpers;
 using TRMDesktopUI.Library.Models;
+using TRMDesktopUI.Models;
 
 namespace TRMDesktopUI.ViewModels
 {
@@ -17,11 +19,13 @@ namespace TRMDesktopUI.ViewModels
         IProductEndpoint _productEndpoint;
         ISaleEndpoint _saleEndpoint;
         IConfigHelper _configHelper;
+        IMapper _mapper;
 
-        private BindingList<ProductModel> _products;
-        private BindingList<CartItemModel> _cart= new BindingList<CartItemModel>();
 
-        private ProductModel _selectedProduct;
+        private BindingList<ProductDisplayModel> _products;
+        private BindingList<CartItemDisplayModel> _cart= new BindingList<CartItemDisplayModel>();
+
+        private ProductDisplayModel _selectedProduct;
 
         private int _itemQuantity=1;
         
@@ -32,11 +36,13 @@ namespace TRMDesktopUI.ViewModels
 
         public SalesViewModel(IProductEndpoint productEndpoint, 
                               ISaleEndpoint saleEndpoint,
-                              IConfigHelper configHelper
+                              IConfigHelper configHelper,
+                              IMapper mapper
         ){
             _productEndpoint = productEndpoint;
             _saleEndpoint = saleEndpoint;
             _configHelper = configHelper;
+            _mapper = mapper;
         }
         protected async override void OnViewLoaded(object view)
         {
@@ -47,7 +53,7 @@ namespace TRMDesktopUI.ViewModels
         #endregion
 
         #region Properties
-        public BindingList<ProductModel> Products
+        public BindingList<ProductDisplayModel> Products
         {
             get { return _products; }
             set
@@ -57,7 +63,7 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<CartItemModel> Cart
+        public BindingList<CartItemDisplayModel> Cart
         {
             get { return _cart; }
             set
@@ -78,7 +84,7 @@ namespace TRMDesktopUI.ViewModels
             }
         }
             
-        public ProductModel SelectedProduct
+        public ProductDisplayModel SelectedProduct
         {
             get { return _selectedProduct; }
             set
@@ -159,18 +165,15 @@ namespace TRMDesktopUI.ViewModels
         #region Methods
         public void AddToCart()
         {
-            CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+            CartItemDisplayModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
 
             if (existingItem != null)
             {
                 existingItem.QuantityInCart += ItemQuantity;
-                // update the item quantity. Can't use notify property so this is a workaround
-                Cart.Remove(existingItem);
-                Cart.Add(existingItem);
             }
             else
             {
-                CartItemModel item = new CartItemModel
+                CartItemDisplayModel item = new CartItemDisplayModel
                 {
                     Product = SelectedProduct,
                     QuantityInCart = ItemQuantity
@@ -216,7 +219,9 @@ namespace TRMDesktopUI.ViewModels
         private async Task LoadProducts()
         {
             var productList = await _productEndpoint.GetAll();
-            Products = new BindingList<ProductModel>(productList);
+            // convert from our api's product model format to our display model (automapper mapped these at start)
+            var products = _mapper.Map<List<ProductDisplayModel>>(productList);
+            Products = new BindingList<ProductDisplayModel>(products);
         }
         private decimal CalculateSubTotal()
         {
