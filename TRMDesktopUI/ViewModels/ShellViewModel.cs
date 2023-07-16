@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TRMDesktopUI.EventModels;
+using TRMDesktopUI.Library.Models;
 
 namespace TRMDesktopUI.ViewModels
 {
@@ -17,17 +18,23 @@ namespace TRMDesktopUI.ViewModels
         private SalesViewModel _salesVM;
 
         private IEventAggregator _events;
-   
+
+        private ILoggedInUserModel _user;
+
         #endregion
 
         #region Constructor
-        public ShellViewModel(IEventAggregator events, LoginViewModel loginVM,
-                              SalesViewModel salesVM)
+        public ShellViewModel(IEventAggregator events, 
+                              LoginViewModel loginVM,
+                              SalesViewModel salesVM,
+                              ILoggedInUserModel user
+        )
         {
             _loginVM = loginVM;
 
             _events = events;
             _salesVM = salesVM;
+            _user = user;
            
 
             _events.SubscribeOnPublishedThread(this); // Wires this instance to listening for events
@@ -40,10 +47,39 @@ namespace TRMDesktopUI.ViewModels
 
         #endregion
 
-        #region Methods
+        #region Properties
+        public bool IsLoggedIn
+        {
+            get
+            {
+                bool output = false;
+
+                if (string.IsNullOrWhiteSpace(_user.Token) == false)
+                {
+                    output = true;
+                }
+
+                return output;
+            }
+        }
+        #endregion
+
+            #region Methods
+        public void LogOut()
+        {
+            _user.LogOffUser();
+            ActivateItemAsync(IoC.Get<LoginViewModel>());
+            NotifyOfPropertyChange(() => IsLoggedIn);
+        }
+        public void ExitApplication()
+        {
+            TryCloseAsync();
+        }
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
             await ActivateItemAsync(_salesVM);
+
+            NotifyOfPropertyChange(() => IsLoggedIn);
         }
         #endregion
     }
