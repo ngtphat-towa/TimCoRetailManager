@@ -223,6 +223,7 @@ namespace TRMDesktopUI.ViewModels
         {
             // TODO: Refactor the code to move the checkout cart logic from the front-end to the back-end.
             // This will improve the separation of concerns and make the code more maintainable.
+            // TODO: catch exceptions
             // TODO: Create a SaleModel and post to the API
             SaleModel sale = new SaleModel();
 
@@ -236,6 +237,7 @@ namespace TRMDesktopUI.ViewModels
             }
 
             await _saleEndpoint.PostSale(sale);
+            await ResetSalesViewModel();
         }
         #endregion
 
@@ -246,6 +248,19 @@ namespace TRMDesktopUI.ViewModels
             // convert from our api's product model format to our display model (automapper mapped these at start)
             var products = _mapper.Map<List<ProductDisplayModel>>(productList);
             Products = new BindingList<ProductDisplayModel>(products);
+        }
+        private async Task ResetSalesViewModel()
+        {
+            Cart = new BindingList<CartItemDisplayModel>();
+            // TODO: verify SelectedCartItem is cleared to default as well
+            // reset to defaults
+            await LoadProducts();
+
+            // update the bindings
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
         private decimal CalculateSubTotal()
         {
