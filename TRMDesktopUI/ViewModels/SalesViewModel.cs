@@ -15,6 +15,7 @@ namespace TRMDesktopUI.ViewModels
     { 
         #region Private Fields
         IProductEndpoint _productEndpoint;
+        ISaleEndpoint _saleEndpoint;
         IConfigHelper _configHelper;
 
         private BindingList<ProductModel> _products;
@@ -29,9 +30,12 @@ namespace TRMDesktopUI.ViewModels
 
         #region Contructor
 
-        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
-        {
+        public SalesViewModel(IProductEndpoint productEndpoint, 
+                              ISaleEndpoint saleEndpoint,
+                              IConfigHelper configHelper
+        ){
             _productEndpoint = productEndpoint;
+            _saleEndpoint = saleEndpoint;
             _configHelper = configHelper;
         }
         protected async override void OnViewLoaded(object view)
@@ -142,7 +146,10 @@ namespace TRMDesktopUI.ViewModels
             {
                 bool output = false;
 
-                // Make sure there is something in the cart
+                if (Cart.Count > 0)
+                {
+                    output = true;
+                }
                 return output;
 
             }
@@ -176,17 +183,32 @@ namespace TRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
         public void RemoveFromCart()
         {
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
-        public void CheckOut()
+        public async Task CheckOut()
         {
             // TODO: Refactor the code to move the checkout cart logic from the front-end to the back-end.
             // This will improve the separation of concerns and make the code more maintainable.
+            // TODO: Create a SaleModel and post to the API
+            SaleModel sale = new SaleModel();
+
+            foreach (var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
+
+            await _saleEndpoint.PostSale(sale);
         }
         #endregion
 
