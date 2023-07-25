@@ -74,7 +74,7 @@ namespace TRMDataManager.Library.DataAccess
                         sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
                     }
                     // explicit call - this should be called implicitly as well - Closes transaction
-                    //sql.CommitTransaction();
+                    sql.CommitTransaction();
                 }
                 catch 
                 {

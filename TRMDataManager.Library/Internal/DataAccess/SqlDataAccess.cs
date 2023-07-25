@@ -14,6 +14,9 @@ namespace TRMDataManager.Library.Internal.DataAccess
     {
         private IDbConnection _connection;
         private IDbTransaction _transaction;
+
+        private bool isClosed = false;
+
         /// <summary>
         /// Gets the connection string with the specified name from the configuration.
         /// </summary>
@@ -84,6 +87,7 @@ namespace TRMDataManager.Library.Internal.DataAccess
             _connection = new SqlConnection(connectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction();
+            isClosed = false;
         }
 
         // load using the transaction
@@ -124,6 +128,7 @@ namespace TRMDataManager.Library.Internal.DataAccess
         {
             _transaction?.Commit();
             _connection?.Close();
+            isClosed = true;
         }
 
 
@@ -132,15 +137,30 @@ namespace TRMDataManager.Library.Internal.DataAccess
         {
             _transaction?.Rollback();
             _connection?.Close();
+            isClosed = true;
         }
-       
+
         //dispose
         public void Dispose()
         {
             CommitTransaction();
+            if (!isClosed)
+            {
+                try
+                {
+                    CommitTransaction();
+                }
+                catch
+                {
+                    // TODO: Log this issue
+                }
+            }
+
+            _transaction = null;
+            _connection = null;
         }
 
-        
+
 
     }
 
