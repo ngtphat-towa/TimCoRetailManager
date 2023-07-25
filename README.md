@@ -22,4 +22,7 @@
 17. Wire Up the WPF Shopping Cart ✔
 18. Modifying SQL, the API, and WPF to Add Taxes ✔
 19. Early Refactoring in C# ✔
-
+20. Posting Sales Data to an API ✔
+21. Automapper and INotifyPropertyChanged ✔
+22. C# Debugging and Clean Up ✔
+23. SQL Transactions in C# using Dapper ✔

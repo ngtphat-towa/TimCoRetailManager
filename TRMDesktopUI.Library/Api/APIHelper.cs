@@ -86,7 +86,7 @@ namespace TRMDesktopUI.Library.Api
                     _loggedInUserModel.Id = result.Id;
                     _loggedInUserModel.FirstName = result.FirstName;
                     _loggedInUserModel.LastName = result.LastName;
-                    _loggedInUserModel.Token = result.Token;
+                    _loggedInUserModel.Token = token;
                 }
                 else
                 {
@@ -94,6 +94,11 @@ namespace TRMDesktopUI.Library.Api
                 }
             }
         }
+        public void LogOffUser()
+        {
+            _apiClient.DefaultRequestHeaders.Clear();
+        }
+
         #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using TRMDesktopUI.Helpers;
 using TRMDesktopUI.Library.Api;
 using TRMDesktopUI.Library.Helpers;
 using TRMDesktopUI.Library.Models;
+using TRMDesktopUI.Models;
 using TRMDesktopUI.ViewModels;
 
 namespace TRMDesktopUI
@@ -41,9 +43,14 @@ namespace TRMDesktopUI
         {
             // Configures the container for the application.
 
+            // put the instance of the mapper into the caliburn micro container
+            _container.Instance(ConfigureAutoMapper());
+
+
             // Set the instance of the container
             _container.Instance(_container)
-              .PerRequest<IProductEndpoint, ProductEndpoint>();
+              .PerRequest<IProductEndpoint, ProductEndpoint>()
+              .PerRequest<ISaleEndpoint,SaleEndpoint>();
 
             // Register the WindowManager and EventAggregator as singletons
             _container
@@ -76,6 +83,21 @@ namespace TRMDesktopUI
         {
             _container.BuildUp(instance);
         }
+        private IMapper ConfigureAutoMapper()
+        {
+            // Read this document:
+            // https://docs.automapper.org/en/stable/Configuration.html
+            // let automapper use reflection at start once to make this efficient
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProductModel, ProductDisplayModel>();
+                cfg.CreateMap<CartItemModel, CartItemDisplayModel>();
+            });
 
+            //create the actual mapper
+            var output = config.CreateMapper();
+
+            return output;
+        }
     }
 }
