@@ -10,8 +10,10 @@ using Dapper;
 
 namespace TRMDataManager.Library.Internal.DataAccess
 {
-    internal class SqlDataAccess
+    internal class SqlDataAccess :  IDisposable
     {
+        private IDbConnection _connection;
+        private IDbTransaction _transaction;
         /// <summary>
         /// Gets the connection string with the specified name from the configuration.
         /// </summary>
@@ -69,6 +71,77 @@ namespace TRMDataManager.Library.Internal.DataAccess
                     commandType: CommandType.StoredProcedure);
             }
         }
+        /// <summary>
+        /// Starts a transaction with the given connection string name.
+        /// </summary>
+        /// <param name="connectionStringName">The name of the connection string.</param>
+        // open connection/start transaction method
+        public void StartTransaction(string connectionStringName)
+        {
+            // convert connection string name to actual connection string from Configuration Manager
+            string connectionString = GetConnectionString(connectionStringName);
+            // create connection
+            _connection = new SqlConnection(connectionString);
+            _connection.Open();
+            _transaction = _connection.BeginTransaction();
+        }
+
+        // load using the transaction
+        /// <summary>
+        /// Loads data in a transaction using the given stored procedure and parameters.
+        /// </summary>
+        /// <typeparam name="T">The type of the data to return.</typeparam>
+        /// <typeparam name="U">The type of the parameters.</typeparam>
+        /// <param name="storedProcedure">The stored procedure to execute.</param>
+        /// <param name="parameters">The parameters to pass to the stored procedure.</param>
+        /// <returns>A list of data of type T.</returns>
+        public List<T> LoadDataInTransaction<T, U>(string storedProcedure, U parameters)
+        {
+            List<T> rows = _connection.Query<T>(storedProcedure, parameters,
+                commandType: CommandType.StoredProcedure, transaction: _transaction).ToList();
+
+            return rows;
+        }
+
+        // save using the transaction
+        /// <summary>
+        /// Saves data in a transaction using the given stored procedure and parameters.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameters.</typeparam>
+        /// <param name="storedProcedure">The stored procedure to execute.</param>
+        /// <param name="parameters">The parameters to pass to the stored procedure.</param>
+        public void SaveDataInTransaction<T>(string storedProcedure, T parameters)
+        {
+            _connection.Execute(storedProcedure, parameters,
+                    commandType: CommandType.StoredProcedure, transaction: _transaction);
+        }
+
+        // close connection/stop transaction
+        /// <summary>
+        /// Commits a Transaction. Call if a transaction has succeeded.
+        /// </summary>
+        public void CommitTransaction()
+        {
+            _transaction?.Commit();
+            _connection?.Close();
+        }
+
+
+        /// Rolls back a Transaction. Call if a transaction has failed.
+        public void RollbackTransaction()
+        {
+            _transaction?.Rollback();
+            _connection?.Close();
+        }
+       
+        //dispose
+        public void Dispose()
+        {
+            CommitTransaction();
+        }
+
+        
+
     }
 
 
