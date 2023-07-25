@@ -26,3 +26,4 @@
 21. Automapper and INotifyPropertyChanged ✔
 22. C# Debugging and Clean Up ✔
 23. SQL Transactions in C# using Dapper ✔
+24. SQL Transaction Bug Fix ✔
