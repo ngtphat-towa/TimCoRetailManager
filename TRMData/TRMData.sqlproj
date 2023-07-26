@@ -82,7 +82,6 @@
     <Build Include="dbo\StoredProcedures\spInventory_GetAll.sql" />
     <Build Include="dbo\StoredProcedures\spInventory_Insert.sql" />
     <Build Include="dbo\StoredProcedures\spSale_SaleReport.sql" />
-    <Build Include="mock-db-script\insert-into-AspNetRoles.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="TRMData.refactorlog" />
