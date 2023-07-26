@@ -34,3 +34,4 @@
 29. Managing User Roles ✔
 30. Special Announcement ✔
 31. Upgrading to .NET Core: Front-End Class Library ✔
+32. Upgrading to .NET Core: Back-End Class Library ✔
