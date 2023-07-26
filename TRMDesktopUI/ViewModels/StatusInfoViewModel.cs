@@ -9,8 +9,14 @@ namespace TRMDesktopUI.ViewModels
 {
     public class StatusInfoViewModel: Screen
     {
+
+        #region Properties
         public string Header { get; private set; }
         public string Message { get; private set; }
+        #endregion
+
+
+        #region Methods
 
         public void UpdateMessage(string header, string message)
         {
@@ -24,6 +30,7 @@ namespace TRMDesktopUI.ViewModels
         public void Close()
         {
             TryCloseAsync();
-        }
+        } 
+        #endregion
     }
 }

@@ -31,3 +31,4 @@
 26. Adding Roles to the API ✔
 27. User Permissions and Error Handling ✔
 28. Displaying Users and Groups/Roles ✔
+29. Managing User Roles ✔
