@@ -32,3 +32,4 @@
 27. User Permissions and Error Handling ✔
 28. Displaying Users and Groups/Roles ✔
 29. Managing User Roles ✔
+30. Special Announcement ✔
