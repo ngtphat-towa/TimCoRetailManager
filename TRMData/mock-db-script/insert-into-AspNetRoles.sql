@@ -1,0 +1,13 @@
+﻿INSERT INTO dbo.AspNetRoles (Id, [Name])
+VALUES (NEWID(), 'Cashier')
+, (NEWID(), 'Manager')
+, (NEWID(), 'Admin');
+
+SELECT * FROM DBO.AspNetRoles;
+SELECT * FROM DBO.AspNetUsers;
+SELECT * FROM DBO.AspNetUserRoles;
+
+INSERT INTO DBO.AspNetUserRoles(UserId, RoleId)
+	VALUES ('de664676-63d8-43f8-8d02-d7ef689d42de','C5D63BAC-0B2B-4293-8830-E781BEAA3815')
+	--,	   ('de664676-63d8-43f8-8d02-d7ef689d42de','07A44A86-8064-4966-95D4-EF68B6284B0F')
+	--,	   ('de664676-63d8-43f8-8d02-d7ef689d42de','378DDC74-B941-4FEB-AE67-6AB815A74D83');
