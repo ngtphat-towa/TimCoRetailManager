@@ -50,6 +50,7 @@ namespace TRMDesktopUI
             // Set the instance of the container
             _container.Instance(_container)
               .PerRequest<IProductEndpoint, ProductEndpoint>()
+              .PerRequest<IUserEndpoint, UserEndpoint>()
               .PerRequest<ISaleEndpoint,SaleEndpoint>();
 
             // Register the WindowManager and EventAggregator as singletons

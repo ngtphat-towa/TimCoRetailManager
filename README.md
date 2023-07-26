@@ -26,3 +26,10 @@
 21. Automapper and INotifyPropertyChanged ✔
 22. C# Debugging and Clean Up ✔
 23. SQL Transactions in C# using Dapper ✔
+24. SQL Transaction Bug Fix ✔
+25. Admin Endpoints in WebAPI ✔
+26. Adding Roles to the API ✔
+27. User Permissions and Error Handling ✔
+28. Displaying Users and Groups/Roles ✔
+29. Managing User Roles ✔
+30. Special Announcement ✔
