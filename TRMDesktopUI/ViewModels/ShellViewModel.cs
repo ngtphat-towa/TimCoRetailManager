@@ -66,13 +66,17 @@ namespace TRMDesktopUI.ViewModels
         }
         #endregion
 
-            #region Methods
+        #region Methods
         public void LogOut()
         {
             _user.ResetUserModel();
             _apiHelper.LogOffUser();
             ActivateItemAsync(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsLoggedIn);
+        }
+        public void UserManagement()
+        {
+            ActivateItemAsync(IoC.Get<UserDisplayViewModel>());
         }
         public void ExitApplication()
         {
