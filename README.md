@@ -33,3 +33,4 @@
 28. Displaying Users and Groups/Roles ✔
 29. Managing User Roles ✔
 30. Special Announcement ✔
+31. Upgrading to .NET Core: Front-End Class Library ✔
