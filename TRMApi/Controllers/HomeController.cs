@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,16 @@ namespace TRMApi.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        public HomeController(ILogger<HomeController> logger, 
+                              RoleManager<IdentityRole> roleManager, 
+                              UserManager<IdentityUser> userManager
+         )
         {
             _logger = logger;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -25,6 +32,28 @@ namespace TRMApi.Controllers
 
         public IActionResult Privacy()
         {
+            /**
+             * This is used to initialized our db with roles and assign a user with whatever roles created
+             */
+
+            /*
+            string[] roles = { "Admin", "Cashier", "Manager" };
+            foreach (var role in roles)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(role);
+                if (roleExist == false)
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+            var user = await _userManager.FindByEmailAsync("ngtphat.towa@gmail.com");
+            if (user != null)
+            {
+                await _userManager.AddToRoleAsync(user, "Admin");
+                await _userManager.AddToRoleAsync(user, "Cashier");
+            }
+            */
+
             return View();
         }
 

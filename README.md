@@ -35,3 +35,4 @@
 30. Special Announcement ✔
 31. Upgrading to .NET Core: Front-End Class Library ✔
 32. Upgrading to .NET Core: Back-End Class Library ✔
+33. Upgrading to .NET Core: From WebAPI to ASP.NET Core API ✔

@@ -57,7 +57,7 @@ namespace TRMDataManager.Controllers
 
             return output;
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("api/User/Admin/GetAllRoles")]
         public Dictionary<string, string> GetAllRoles()
@@ -70,7 +70,7 @@ namespace TRMDataManager.Controllers
                 return roles;
             }
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("api/User/Admin/AddRole")]
         public void AddRole(UserRolePairModel pairing)
@@ -83,7 +83,7 @@ namespace TRMDataManager.Controllers
                 userManager.AddToRole(pairing.UserId, pairing.RoleName);
             }
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("api/User/Admin/RemoveRole")]
         public void RemoveRole(UserRolePairModel pairing)
