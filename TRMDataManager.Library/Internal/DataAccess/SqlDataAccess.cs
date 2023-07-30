@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace TRMDataManager.Library.Internal.DataAccess
 {
@@ -14,6 +15,12 @@ namespace TRMDataManager.Library.Internal.DataAccess
     {
         private IDbConnection _connection;
         private IDbTransaction _transaction;
+        private readonly IConfiguration _config;
+
+        public SqlDataAccess(IConfiguration config)
+        {
+            _config = config;
+        }
 
         private bool isClosed = false;
 
@@ -25,7 +32,8 @@ namespace TRMDataManager.Library.Internal.DataAccess
         public string GetConnectionString(string name)
         {
             // Get the connection string with the specified name from the configuration
-            return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+            //return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+            return _config.GetConnectionString(name);
         }
 
         /// <summary>
