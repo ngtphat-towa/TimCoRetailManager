@@ -1,7 +1,8 @@
 ﻿# TimCoRetailManager
 # TimCoRetailManager [TimCo Retail Manager Course](https://www.youtube.com/playlist?list=PLLWMQd6PeGY0bEMxObA6dtYXuJOGfxSPx)
 
-### Checklist
+## Checklist
+### Phase 1
 0. Introduction ✔
 1. Setting Up a GitHub Repository ✔
 2. Creating a WebAPI with Authentication ✔
@@ -33,3 +34,12 @@
 28. Displaying Users and Groups/Roles ✔
 29. Managing User Roles ✔
 30. Special Announcement ✔
+31. Upgrading to .NET Core: Front-End Class Library ✔
+32. Upgrading to .NET Core: Back-End Class Library ✔
+33. Upgrading to .NET Core: From WebAPI to ASP.NET Core API ✔
+34. Upgrading to .NET Core: Adding JWT Authentication to Our API ✔
+35. Upgrading to .NET Core: WPF to .NET Core 3.0 ✔
+
+### Phase 2
+36. Planning Phase 2  ✔
+

@@ -15,9 +15,6 @@ namespace TRMDesktopUI.ViewModels
     public class ShellViewModel: Conductor<object>, IHandle<LogOnEvent>
     {
         #region Fields
-        private LoginViewModel _loginVM;
-        private SalesViewModel _salesVM;
-
         private IEventAggregator _events;
         private ILoggedInUserModel _user;
         private IAPIHelper _apiHelper;
@@ -26,16 +23,14 @@ namespace TRMDesktopUI.ViewModels
 
         #region Constructor
         public ShellViewModel(IEventAggregator events,
-                              LoginViewModel loginVM,
-                              SalesViewModel salesVM,
                               ILoggedInUserModel user,
                               IAPIHelper apiHelper
         )
         {
-            _loginVM = loginVM;
+
 
             _events = events;
-            _salesVM = salesVM;
+     
             _user = user;
             _apiHelper = apiHelper;
 
@@ -43,7 +38,7 @@ namespace TRMDesktopUI.ViewModels
 
             // Whenver we stop using this, the view model will go away.
             // It will never have information from a previous form
-            ActivateItemAsync(IoC.Get<LoginViewModel>());
+            ActivateItemAsync(IoC.Get<LoginViewModel>(), new CancellationToken());
         }
 
 
@@ -76,7 +71,7 @@ namespace TRMDesktopUI.ViewModels
         }
         public void UserManagement()
         {
-            ActivateItemAsync(IoC.Get<UserDisplayViewModel>());
+            ActivateItemAsync(IoC.Get<UserDisplayViewModel>(), new CancellationToken());
         }
         public void ExitApplication()
         {
@@ -84,7 +79,7 @@ namespace TRMDesktopUI.ViewModels
         }
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(_salesVM);
+            await ActivateItemAsync(IoC.Get<SalesViewModel>(), cancellationToken);
 
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
