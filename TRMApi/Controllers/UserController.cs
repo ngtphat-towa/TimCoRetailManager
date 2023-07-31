@@ -12,6 +12,7 @@ using System.Linq;
 using TRMApi.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace TRMApi.Controllers
 {
@@ -24,11 +25,17 @@ namespace TRMApi.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserData _userData;
 
-        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IUserData userData)
+        private readonly ILogger<UserController> _logger;
+
+        public UserController(ApplicationDbContext context, 
+                              UserManager<IdentityUser> userManager, 
+                              IUserData userData, 
+                              ILogger<UserController> logger)
         {
             _context = context;
             _userManager = userManager;
             _userData = userData;
+            _logger = logger;
         }
         [HttpGet]
         public UserModel Get()
@@ -80,7 +87,12 @@ namespace TRMApi.Controllers
         [Route("Admin/AddRole")]
         public async Task AddRole(UserRolePairModel pairing)
         {
+            string loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(pairing.UserId);
+
+            _logger.LogInformation("Admin {Admin} added user {User} to role {Role}",
+             loggedInUserId, user.Id, pairing.RoleName);
+
             await _userManager.AddToRoleAsync(user, pairing.RoleName);
 
         }
@@ -90,6 +102,11 @@ namespace TRMApi.Controllers
         public async Task RemoveRole(UserRolePairModel pairing)
         {
             var user = await _userManager.FindByIdAsync(pairing.UserId);
+
+            string loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _logger.LogInformation("Admin {Admin} removed user {User} from role {Role}",
+                loggedInUserId, user.Id, pairing.RoleName);
+
             await _userManager.RemoveFromRoleAsync(user, pairing.RoleName);
         }
     }
