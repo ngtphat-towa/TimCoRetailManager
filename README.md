@@ -37,3 +37,4 @@
 32. Upgrading to .NET Core: Back-End Class Library ✔
 33. Upgrading to .NET Core: From WebAPI to ASP.NET Core API ✔
 34. Upgrading to .NET Core: Adding JWT Authentication to Our API ✔
+35. Upgrading to .NET Core: WPF to .NET Core 3.0 ✔
