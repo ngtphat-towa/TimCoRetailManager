@@ -52,7 +52,7 @@
                 <Button x:Name="RemoveSelectedRole" Content="Remove" Margin="5 0 0 0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <ComboBox x:Name="AvailableRoles"/>
+                <ListBox x:Name="AvailableRoles"/>
                 <Button x:Name="AddSelectedRole" Content="Add Role" Margin="5 0 0 0"/>
             </StackPanel>
         </StackPanel>
