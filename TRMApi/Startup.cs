@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using TRMDataManager.Library.DataAccess;
+using TRMDataManager.Library.Internal.DataAccess;
 
 namespace TRMApi
 {
@@ -39,6 +41,19 @@ namespace TRMApi
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            // Add-on services
+
+            // Data Access Services
+
+            services
+                .AddTransient<ISqlDataAccess, SqlDataAccess>()
+                .AddTransient<IInventoryData, InventoryData>()
+                .AddTransient<IProductData, ProductData>()
+                .AddTransient<ISaleData, SaleData>()
+                .AddTransient<IUserData, UserData>()
+                ;
+
+            // Token Services
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "JwtBearer";
@@ -49,7 +64,7 @@ namespace TRMApi
                 jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretKeyIsSecretSoDoNotTell")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("Secrets:SecurityKey"))),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,

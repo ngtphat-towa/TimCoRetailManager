@@ -183,6 +183,7 @@ namespace TRMDesktopUI.ViewModels
         private async Task LoadRoles()
         {
             var roles = await _userEndpoint.GetAllRoles();
+            AvailableRoles = new BindingList<string>();// Reset everything select new user
 
             foreach (var role in roles)
             {

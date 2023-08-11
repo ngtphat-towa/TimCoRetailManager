@@ -9,13 +9,15 @@ using TRMDataManager.Library.Models;
 
 namespace TRMDataManager.Library.DataAccess
 {
-    public class SaleData
+    public class SaleData : ISaleData
     {
-        private readonly IConfiguration _config;
+        private readonly ISqlDataAccess _sql;
+        private readonly IProductData _productData;
 
-        public SaleData(IConfiguration config)
+        public SaleData(ISqlDataAccess sql, IProductData productData)
         {
-            _config = config;
+            _sql = sql;
+            _productData = productData;
         }
 
         public void SaveSale(SaleModel saleInfo, string cashierId)
@@ -24,8 +26,7 @@ namespace TRMDataManager.Library.DataAccess
 
             // Start filling in the sale detail models we will save to the database
             List<SaleDetailDBModel> details = new List<SaleDetailDBModel>();
-            ProductData products = new ProductData(_config);
-            var taxRate = ConfigHelper.GetTaxRate() ;
+            var taxRate = ConfigHelper.GetTaxRate();
 
             foreach (var item in saleInfo.SaleDetails)
             {
@@ -36,7 +37,7 @@ namespace TRMDataManager.Library.DataAccess
                 };
 
                 // Get the information about this product
-                var productInfo = products.GetProductById(detail.ProductId);
+                var productInfo = _productData.GetProductById(detail.ProductId);
 
                 if (productInfo == null)
                 {
@@ -63,39 +64,35 @@ namespace TRMDataManager.Library.DataAccess
 
             sale.Total = sale.SubTotal + sale.Tax;
 
-            using (SqlDataAccess sql = new SqlDataAccess(_config))
+            try
             {
-                try
+                _sql.StartTransaction("TRMData");
+                // Save the Sale model
+                _sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
+
+                // Get the ID from the sale model
+                sale.Id = _sql.LoadDataInTransaction<int, dynamic>("spSale_Lookup", new { sale.CashierId, sale.SaleDate }).FirstOrDefault();
+
+                // Finish filling in the sale details models
+                foreach (var item in details)
                 {
-                    sql.StartTransaction("TRMData");
-                    // Save the Sale model
-                    sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
-
-                    // Get the ID from the sale model
-                    sale.Id = sql.LoadDataInTransaction<int, dynamic>("spSale_Lookup", new { sale.CashierId, sale.SaleDate }).FirstOrDefault();
-
-                    // Finish filling in the sale details models
-                    foreach (var item in details)
-                    {
-                        item.SaleId = sale.Id;
-                        // Save the sale detail models
-                        sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
-                    }
-                    // explicit call - this should be called implicitly as well - Closes transaction
-                    sql.CommitTransaction();
+                    item.SaleId = sale.Id;
+                    // Save the sale detail models
+                    _sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
                 }
-                catch 
-                {
+                // explicit call - this should be called implicitly as well - Closes transaction
+                _sql.CommitTransaction();
+            }
+            catch
+            {
 
-                    sql.RollbackTransaction();
-                    throw;
-                }
+                _sql.RollbackTransaction();
+                throw;
             }
         }
         public List<SaleReportModel> GetSalesReport()
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
-            var output = sql.LoadData<SaleReportModel, dynamic>("dbo.spSale_SaleReport", new { }, "TRMData");
+            var output = _sql.LoadData<SaleReportModel, dynamic>("dbo.spSale_SaleReport", new { }, "TRMData");
             return output;
         }
     }
